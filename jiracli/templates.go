@@ -92,6 +92,12 @@ func TemplateProcessor() *template.Template {
 			}
 			return string(bytes), nil
 		},
+		"toLower": func(content string) string {
+			return strings.ToLower(content)
+		},
+		"toUpper": func(content string) string {
+			return strings.ToUpper(content)
+		},
 		"termWidth": func() int {
 			w, _, err := terminal.GetSize(int(os.Stdout.Fd()))
 			if err == nil {
@@ -104,6 +110,9 @@ func TemplateProcessor() *template.Template {
 				return w
 			}
 			return 120
+		},
+		"add": func(a, b int) int {
+			return a + b
 		},
 		"sub": func(a, b int) int {
 			return a - b
@@ -353,7 +362,7 @@ const defaultEditTemplate = `{{/* edit template */ -}}
 # issue: {{ .key }} - created: {{ .fields.created | age}} ago
 update:
   comment:
-    - add: 
+    - add:
         body: |~
           {{ or .overrides.comment "" | indent 10 }}
 fields:
@@ -483,7 +492,7 @@ const defaultTransitionTemplate = `{{/* transition template */ -}}
 {{- if .meta.fields.comment }}
 update:
   comment:
-    - add: 
+    - add:
         body: |~
           {{ or .overrides.comment "" | indent 10 }}
 {{- end -}}
